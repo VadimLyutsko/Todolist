@@ -1,43 +1,56 @@
 import React, {useState} from 'react';
-import './App.css';
-import {filterValue,  Todolist} from './Todolist';
+import {filterType, TodoList} from './Todolist';
+import styles from './App.module.css';
 
 const App: React.FC = () => {
-    const [tasks, setTask] = useState([
+    const [tasks, setTasks] = useState([
         {id: 1, title: 'HTML&CSS', isDone: true},
         {id: 2, title: 'JS', isDone: true},
         {id: 3, title: 'ReactJS', isDone: false}
     ]);
-    const removeTask = (taskID: number) => {
-        setTask(tasks.filter(item => item.id !== taskID));
+
+    const addTasks = (newTitle: string) => {
+        newTitle && setTasks([{id: 5, title: newTitle, isDone: false}, ...tasks]);
     };
 
-    const [filter, srtFilter] = useState("All");
 
-    const getTusksForTodolist = () => {
-        switch (filter) {
+
+    const [filteredTaskId, setFilteredTask] = useState<filterType>('All');
+
+
+    const removeTask = (taskId: number) => {
+        setTasks(tasks.filter(item => item.id !== taskId));
+    };
+
+    const getFilteredTasks = () => {
+
+        switch (filteredTaskId) {
             case 'Active':
-                return tasks.filter(t => !t.isDone)
+                return tasks.filter(item => !item.isDone);
             case 'Completed':
-                return tasks.filter(t => t.isDone)
-            default:
-                return tasks
+                return tasks.filter(item => item.isDone);
         }
-    }
-
-    const changeFilter = (filterValue: filterValue) => {
-        srtFilter(filterValue)
+        return tasks;
     };
+
+    const changeFilter = (filter: filterType) => {
+        setFilteredTask(filter);
+
+    };
+
     return (
-        <div className="App">
-            <Todolist
-                title="What to learn"
-                 tasks={getTusksForTodolist()}
+        <div className={styles.App}>
+
+            <TodoList
+                addTasks={addTasks}
+                tasks={getFilteredTasks()}
                 removeTask={removeTask}
                 changeFilter={changeFilter}
-
+                title="What to learn"
             />
+
         </div>
     );
 };
+
 export default App;
