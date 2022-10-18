@@ -35,7 +35,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({addItem}) => {
                 onChange={onChangeSetLocalTitle}
                 onKeyDown={onEnterDownAddItem}
                 className={error ? 'error' : ''}
-                placeholder='&#128172;'
+                placeholder='Touch me :)'
             />
             <button onClick={addNewItem}>+</button>
             {errorMessage}
