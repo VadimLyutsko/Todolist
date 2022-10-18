@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import TodoList, {TaskType} from './TodoList';
 import {v1} from 'uuid';
+import {AddItemForm} from './AddItemForm';
 
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
@@ -23,17 +24,17 @@ function App() {
         {id: todoListId_2, todoListTitle: 'What to byu', filter: 'completed'},
     ]);
     const [tasks, setTasks] = useState<TasksStateType>({
-            [todoListId_1]: [
-                {id: v1(), title: 'Milk', isDone: true},
-                {id: v1(), title: 'HTML&CSS', isDone: true},
-                {id: v1(), title: 'HTML&CSS', isDone: true},
-            ],
-            [todoListId_2]: [
-                {id: v1(), title: '2222&CSS', isDone: true},
-                {id: v1(), title: 'Trees', isDone: true},
-                {id: v1(), title: 'Grass', isDone: true},
-            ]
-        });
+        [todoListId_1]: [
+            {id: v1(), title: 'Milk', isDone: true},
+            {id: v1(), title: 'HTML&CSS', isDone: true},
+            {id: v1(), title: 'HTML&CSS', isDone: true},
+        ],
+        [todoListId_2]: [
+            {id: v1(), title: '2222&CSS', isDone: true},
+            {id: v1(), title: 'Trees', isDone: true},
+            {id: v1(), title: 'Grass', isDone: true},
+        ]
+    });
 
 
     const removeTask = (taskId: string, todoListId: string) => {
@@ -58,13 +59,24 @@ function App() {
         });
     };
 
+    const removeTodoList = (todoListId: string) => {
+        setTodoLists(todoLists.filter(t => t.id !== todoListId));
+        delete tasks[todoListId];
+    };
+
     const changeTodoListFilter = (filter: FilterValuesType, todoListId: string) => {
         setTodoLists(todoLists.map(t => t.id === todoListId ? {...t, filter: filter} : t));
     };
 
-    const removeTodoList = (todoListId: string) => {
-        setTodoLists(todoLists.filter(t => t.id !== todoListId));
-        delete  tasks[todoListId]
+    const addToDoList = (title: string) => {
+        const newToDoListId: string = v1();
+        const newToDoList: TodoListType = {
+            id: newToDoListId,
+            todoListTitle: title,
+            filter: 'all'
+        };
+        setTodoLists([...todoLists, newToDoList]);
+        setTasks({...tasks, [newToDoListId]: []});
     };
 
     //GUI:
@@ -79,8 +91,8 @@ function App() {
         return tasksForTodoList;
     };
 
-    const todoListComponents = todoLists.map(t=>{
-        return(
+    const todoListComponents = todoLists.map(t => {
+        return (
             <TodoList
                 key={t.id}
                 todoListId={t.id}
@@ -93,12 +105,14 @@ function App() {
                 addTask={addTask}
                 changeTaskStatus={changeTaskStatus}
             />
-        )
-    })
+        );
+    });
 
     return (
         <div className="App">
+            {<span style={{marginTop: "25px", marginRight:'25px'}}><AddItemForm addItem={addToDoList}></AddItemForm></span>}
             {todoListComponents}
+
         </div>
     );
 }

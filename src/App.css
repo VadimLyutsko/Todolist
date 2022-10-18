@@ -1,6 +1,7 @@
 .App {
   padding: 30px;
   display: flex;
+  flex-wrap: wrap;
 }
 
 .App > div {
@@ -35,3 +36,5 @@
   border: 2px solid hotpink;
   outline: none;
 }
+
+
