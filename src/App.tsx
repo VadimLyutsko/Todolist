@@ -9,12 +9,12 @@ import {Menu} from '@material-ui/icons';
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
 
-type TodoListType = {
+export type TodoListType = {
     id: string
     todoListTitle: string
     filter: FilterValuesType
 }
-type TasksStateType = { [todoListId: string]: Array<TaskType> }
+export type TasksStateType = { [todoListId: string]: Array<TaskType> }
 
 
 function App() {
@@ -60,9 +60,6 @@ function App() {
         });
     };
 
-    const changeTodoListTitle = (title: string, todoListId: string) => {
-        setTodoLists(todoLists.map(t => t.id === todoListId ? {...t, todoListTitle: title} : t));
-    };
 
     const changeTaskTitle = (taskId: string, title: string, todoListId: string) => {
         setTasks({
@@ -71,6 +68,8 @@ function App() {
         });
     };
 
+    // todolists
+
     const removeTodoList = (todoListId: string) => {
         setTodoLists(todoLists.filter(t => t.id !== todoListId));
         delete tasks[todoListId];
@@ -78,6 +77,10 @@ function App() {
 
     const changeTodoListFilter = (filter: FilterValuesType, todoListId: string) => {
         setTodoLists(todoLists.map(t => t.id === todoListId ? {...t, filter: filter} : t));
+    };
+
+    const changeTodoListTitle = (title: string, todoListId: string) => {
+        setTodoLists(todoLists.map(t => t.id === todoListId ? {...t, todoListTitle: title} : t));
     };
 
     const addToDoList = (title: string) => {
@@ -90,6 +93,7 @@ function App() {
         setTodoLists([...todoLists, newToDoList]);
         setTasks({...tasks, [newToDoListId]: []});
     };
+
 
     //GUI:
     const getFilteredTasks = (t: Array<TaskType>, f: FilterValuesType) => {
@@ -107,25 +111,25 @@ function App() {
     const todoListComponents = todoLists.map(t => {
         return (
             <Grid item key={t.id}>
-            <Paper
-                variant={'outlined'}
-                // elevation={10}
-                style={{width: '270px', padding: '20px'}}>
-                <TodoList
+                <Paper
+                    variant={'outlined'}
+                    // elevation={10}
+                    style={{width: '270px', padding: '20px'}}>
+                    <TodoList
 
-                    todoListId={t.id}
-                    filter={t.filter}
-                    tasks={getFilteredTasks(tasks[t.id], t.filter)}
-                    title={t.todoListTitle}
-                    removeTodoList={removeTodoList}
-                    removeTask={removeTask}
-                    changeTodoListFilter={changeTodoListFilter}
-                    addTask={addTask}
-                    changeTaskStatus={changeTaskStatus}
-                    changeTaskTitle={changeTaskTitle}
-                    changeTodoListTitle={changeTodoListTitle}
-                />
-            </Paper>
+                        todoListId={t.id}
+                        filter={t.filter}
+                        tasks={getFilteredTasks(tasks[t.id], t.filter)}
+                        title={t.todoListTitle}
+                        removeTodoList={removeTodoList}
+                        removeTask={removeTask}
+                        changeTodoListFilter={changeTodoListFilter}
+                        addTask={addTask}
+                        changeTaskStatus={changeTaskStatus}
+                        changeTaskTitle={changeTaskTitle}
+                        changeTodoListTitle={changeTodoListTitle}
+                    />
+                </Paper>
             </Grid>
         );
     });
@@ -148,7 +152,7 @@ function App() {
                     <AddItemForm addItem={addToDoList}/>
                 </Grid>
                 <Grid container spacing={5}>
-                {todoListComponents}
+                    {todoListComponents}
                 </Grid>
             </Container>
         </div>

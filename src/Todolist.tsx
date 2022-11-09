@@ -2,6 +2,8 @@ import React, {ChangeEvent} from 'react';
 import {FilterValuesType} from './App';
 import {AddItemForm} from './AddItemForm';
 import {EditableSpan} from './EditableSpan';
+import {Button, ButtonGroup, Checkbox, IconButton, List, ListItem, Typography} from '@material-ui/core';
+import {DeleteOutlineRounded} from '@material-ui/icons';
 //rsc
 type TodoListPropsType = {
     todoListId: string
@@ -34,21 +36,22 @@ const TodoList = (props: TodoListPropsType) => {
         };
 
         return (
-            <li key={t.id} className={t.isDone ? 'isDone' : 'notIsDone'}>
-                <input
+            <ListItem   key={t.id} className={t.isDone ? 'isDone' : 'notIsDone'}>
+                <Checkbox
+                     color={'default'}
                     onChange={changeTaskStatus}
-                    type={'checkbox'}
+                    // type={'checkbox'}
                     checked={t.isDone}
                 />
                 {/*<span>{t.title}</span>*/}
                 <EditableSpan title={t.title} changeTitle={changeTaskTitle}/>
-                <button onClick={removeTask}>x</button>
-            </li>
+                <IconButton onClick={removeTask}><DeleteOutlineRounded/></IconButton>
+            </ListItem>
         );
     };
 
     const tasksList = props.tasks.length
-        ? <ul>{props.tasks.map(getTasksListItem)}</ul>
+        ? <List  >{props.tasks.map(getTasksListItem)}</List>
         : <span>Ты всё выполнил, тупица!!!</span>;
 
     const addTask = (title: string) => {
@@ -63,31 +66,36 @@ const TodoList = (props: TodoListPropsType) => {
         props.changeTodoListTitle(title, props.todoListId);
     };
     return (
-        <div>
-            <h3>
+        <div >
+            <Typography variant={'h5'} align={'center'}>
                 <EditableSpan title={props.title} changeTitle={changeTodoListTitle}/>
-                <button onClick={removeTodoList}>&#128169;</button>
-            </h3>
+                <Button variant={'text'} onClick={removeTodoList}>&#128169;</Button>
+            </Typography>
             <div>
                 <AddItemForm addItem={addTask}/>
             </div>
             {tasksList}
             <div>
-                <button
-                    className={props.filter === 'all' ? 'active-btn btn' : 'btn'}
+                <ButtonGroup style={{display:'flex',justifyContent:"space-around"}} disableElevation  variant='contained' size={'small'} >
+                <Button
+                    style={{marginRight:"3px",borderRadius:'10px'}}
+                    color={props.filter === 'all' ? 'primary' : 'secondary'}
                     onClick={handlerCreator('all')}
                 >All
-                </button>
-                <button
-                    className={props.filter === 'active' ? 'active-btn btn' : 'btn'}
+                </Button>
+                <Button
+                    style={{marginRight:"3px",borderRadius:'10px'}}
+                    color={props.filter === 'active' ? 'primary' : 'secondary'}
                     onClick={handlerCreator('active')}
                 >Active
-                </button>
-                <button
-                    className={props.filter === 'completed' ? 'active-btn' : 'btn'}
+                </Button>
+                <Button
+                    style={{marginRight:"3px",borderRadius:'10px'}}
+                    color={props.filter === 'completed' ? 'primary' : 'secondary'}
                     onClick={handlerCreator('completed')}
                 >Completed
-                </button>
+                </Button>
+                </ButtonGroup>
             </div>
         </div>
     );
